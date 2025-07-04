@@ -1,5 +1,5 @@
 import discord
-from discord.ext import tasks
+from discord.ext import commands, tasks
 from plexapi.server import PlexServer
 import asyncio
 import json
@@ -55,6 +55,28 @@ class PlexDiscordBot(discord.Client):
         
         # Start the update loop
         self.update_library.start()
+        
+    async def on_message(self, message):
+        # Don't respond to ourselves or other bots
+        if message.author == self.user or message.author.bot:
+            return
+            
+        # Check if the message is in the configured channel
+        if message.channel.id != CHANNEL_ID:
+            return
+            
+        # Manual sync command
+        if message.content.lower() in ('!sync', '!update', '!refresh'):
+            try:
+                msg = await message.channel.send('🔄 Syncing Plex library...')
+                current_content = await self.get_library_content()
+                current_titles = set(item['key'] for item in current_content)
+                new_items = current_titles - self.last_known_content if self.last_known_content else set()
+                await self.post_complete_library(current_content, new_items)
+                self.last_known_content = current_titles
+                await msg.edit(content='✅ Library synced successfully!')
+            except Exception as e:
+                await message.channel.send(f'❌ Error syncing library: {str(e)}')
         
     @tasks.loop(minutes=UPDATE_INTERVAL_MINUTES)
     async def update_library(self):

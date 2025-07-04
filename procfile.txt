@@ -1,0 +1,1 @@
+worker: python plex_discord_bot.py

@@ -84,7 +84,7 @@ class PlexDiscordBot(discord.Client):
             new_items = current_titles - self.last_known_content if self.last_known_content else set()
             if new_items:
                 print(f"📥 Found {len(new_items)} new items.")
-            await self.post_complete_library(current_content, new_items)
+                await self.post_complete_library(current_content, new_items)
             self.last_known_content = current_titles
         except discord.Forbidden as e:
             print(f"❌ Forbidden error (permissions): {e}")

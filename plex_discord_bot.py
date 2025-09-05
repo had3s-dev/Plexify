@@ -13,7 +13,7 @@ PLEX_TOKEN = os.getenv('PLEX_TOKEN')
 CHANNEL_ID = int(os.getenv('CHANNEL_ID', '0'))
 
 # Optional: Customize these
-UPDATE_INTERVAL_MINUTES = int(os.getenv('UPDATE_INTERVAL_MINUTES', '30'))
+UPDATE_INTERVAL_MINUTES = int(os.getenv('UPDATE_INTERVAL_MINUTES', '120'))
 MOVIES_SECTION = os.getenv('MOVIES_SECTION', 'Movies')
 TV_SECTION = os.getenv('TV_SECTION', 'TV Shows')
 
